@@ -50,11 +50,6 @@ interface DataListState {
   loading: boolean;
 }
 
-interface EditFormState {
-  _id: string;
-  title: string;
-}
-
 const message = window.$message;
 const chat = useChatStore();
 
