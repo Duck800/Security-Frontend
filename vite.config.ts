@@ -15,6 +15,11 @@ const alias: Record<string, string> = {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  },
   plugins: [
     vue(),
     legacy(),

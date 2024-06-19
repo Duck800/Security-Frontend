@@ -12,7 +12,7 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 import Prism from 'prismjs';
 import { start } from 'nprogress';
 import useBaseStore from '@/store/base.ts';
-import chatgptImg from '@/assets/images/chatgpt.png';
+import assistantImg from '@/assets/images/assistant.jpg';
 import chatUser from '@/assets/images/avatar.png';
 import { cloneDeep } from 'lodash';
 
@@ -21,15 +21,6 @@ interface RoleOptionsState {
   flex: string;
   bgColor: string;
 }
-
-// interface PromptLibrary {
-//   id: string;
-//   title: string;
-//   description: string;
-//   prompt: string;
-//   category: string;
-//   weight: number;
-// }
 
 const message = window.$message;
 
@@ -40,7 +31,6 @@ export const useChat = () => {
   const sendValue = ref('');
   const chatId = ref<string | null>(null);
   const dataList = ref<ChatDataState[]>([]);
-  // const promptData = ref<PromptLibrary[]>([]);
   const scrollbarRef = ref<ScrollbarInst | null>(null);
   const scrollContainers = ref<NodeListOf<Element> | null>(null);
   const chatRole = reactive<Record<ChatRoleType, RoleOptionsState>>({
@@ -50,23 +40,12 @@ export const useChat = () => {
       bgColor: 'bg-green-200 dark:bg-green-600'
     },
     assistant: {
-      avatar: chatgptImg,
+      avatar: assistantImg,
       flex: 'justify-start',
       bgColor: 'bg-gray-200 dark:bg-gray-600'
     }
   });
 
-  // const getPrompt = () => {
-  //   promptData.value = [];
-  //   // setTimeout(() => {
-  //   //   promptLibrary().then(({ data }) => {
-  //   //     promptData.value = data;
-  //   //   });
-  //   // }, 300);
-  // };
-  // const promptSend = ({ prompt }: PromptLibrary) => {
-  //   handleSend(prompt);
-  // };
   const assistantContentEffect = (content: string) => {
     const regex = /```([\s\S]*?)```/g;
     const parts = content.split(regex);

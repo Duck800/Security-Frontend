@@ -47,23 +47,9 @@
         </n-list>
       </n-scrollbar>
       <div v-else class="w-full h-full flex flex-col justify-center items-center">
-        <div :class="`w-full h-40 flex flex-col justify-around items-center ${base.isMobile ? 'mt-1' : 'mt-60'}`">
-          <chat-gpt-svg size="40" />
-          <div class="mb-5 text-2xl font-medium">How can I help you today?</div>
+        <div :class="`w-full h-60 flex flex-col items-center ${base.isMobile ? 'mt-1' : 'mt-60'}`">
+          <img src="@/assets/images/background.png" height="130%">
         </div>
-        <!-- <div :class="`${base.isMobile ? 'w-full h-96 px-2.5 box-border' : 'w-1/2 h-60'} flex flex-col justify-end items-center`">
-          <n-grid :cols="base.isMobile ? 1 : 2" :x-gap="10" :y-gap="10">
-            <n-grid-item v-for="(item, index) in promptData" :key="index" :style="{ '--stagger': index + 1 }" data-animate>
-              <n-card
-                :title="item.title"
-                size="small"
-                hoverable
-                class="cursor-pointer"
-                @click="promptSend(item)"
-              >{{ item.description }}</n-card>
-            </n-grid-item>
-          </n-grid>
-        </div> -->
       </div>
     </div>
     <div :class="`w-full h-20 pt-3 flex justify-center items-center box-border ${base.isMobile ? 'px-5' : 'px-28'}`">
@@ -84,7 +70,6 @@ import { defineComponent } from 'vue';
 import { NGridItem, NGrid, NSpace, NCard, NTooltip, NSpin, NAvatar, NScrollbar, NList, NListItem, NInput, NInputGroup, NButton, NIcon } from 'naive-ui';
 import { useChat } from '@/views/Chat/hooks';
 import { Checkmark, PaperPlane, CopyOutline } from '@vicons/ionicons5';
-import ChatGptSvg from '@/components/ChatGptSvg.vue';
 
 export default defineComponent({
   name: 'Chat',
