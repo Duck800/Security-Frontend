@@ -117,7 +117,7 @@ export const useChat = () => {
     const newChat = !dataList.value.length;
     const { model, stream, openContext } = chat;
     const text = val || sendValue.value;
-    sendValue.value = '';
+    // sendValue.value = '';
     dataList.value.push({ role: 'user', content: text });
     startLoading('answer');
     await new Promise<void>(resolve => {
@@ -204,18 +204,19 @@ export const useChat = () => {
       return;
     }
     try {
-      // const { data } = await completionsChat(payload);
-      const data = {
-        choices: [
-          {
-            message: {
-              content: "回答",
-              role: <ChatRoleType>'assistant'
-            }
-          }
-        ],
-        createTime: "2024-6-19"
-      }
+      const data = await completionsChat(payload);
+      // const data = {
+      //   choices: [
+      //     {
+      //       message: {
+      //         content: "回答",
+      //         role: <ChatRoleType>'assistant'
+      //       }
+      //     }
+      //   ],
+      //   createTime: "2024-6-19"
+      // }
+      console.log(data);
       // 解析文本
       const [{ message }] = data.choices;
       dataList.value[lastIndex] = {
