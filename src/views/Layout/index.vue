@@ -1,30 +1,19 @@
 <template>
   <div class="w-full h-screen">
     <n-layout has-sider class="h-full">
-      <n-layout-sider
-        v-if="!isMobile"
-        collapse-mode="width"
-        :collapsed-width="0"
-        show-trigger="arrow-circle"
-        bordered
-        content-style="padding: 14px 10px;"
-        :width="240"
-        class="bg-gray-50 dark:bg-black"
-      >
+      <n-layout-sider v-if="!isMobile" collapse-mode="width" :collapsed-width="0" show-trigger="arrow-circle" bordered
+        content-style="padding: 14px 10px;" :width="240" class="bg-gray-50 dark:bg-black">
         <chat-list />
       </n-layout-sider>
       <n-layout>
         <n-layout-header bordered class="h-20 w-full flex justify-between items-center px-8">
           <n-icon v-if="isMobile" size="34" @click="handleList"><reorder-three-sharp /></n-icon>
           <span class="font-bold text-xl">{{ gptModel }}</span>
+          <div id="title" class="Title"></div>
           <switch-theme />
         </n-layout-header>
-        <n-layout-content
-          class="bg-white dark:bg-dark-content pt-3 box-border"
-          bordered
-          content-style="height: calc(100vh - 5.75rem);"
-          :native-scrollbar="false"
-        >
+        <n-layout-content class="bg-white dark:bg-dark-content pt-3 box-border" bordered
+          content-style="height: calc(100vh - 5.75rem);" :native-scrollbar="false">
           <chat />
         </n-layout-content>
       </n-layout>
@@ -48,6 +37,7 @@ import { ReorderThreeSharp } from '@vicons/ionicons5';
 import useChatStore from '@/store/chat.ts';
 import { GPT_MODEL_MAP } from '@/utils/config.ts';
 import { emitterChat } from '@/utils/eventbus.ts';
+import { chatTitle, restart } from '@/api/chat.ts';
 
 const base = useBaseStore();
 const chatStore = useChatStore();
@@ -59,13 +49,52 @@ const handleList = () => {
   visibleList.value = true;
 };
 
+async function fetchDataAndDisplay() {
+  try {
+    const data = await chatTitle(); // 调用 chatTitle 获取标题文本
+    const titleElement = document.getElementById('title');
+    if (titleElement) {
+      if(data !== 'No title'){
+        titleElement.textContent = data; // 将 data 写入到 #title 的文本内容中
+      }
+      else{
+        await fetchDataAndDisplay(); // 递归调用自身继续获取数据
+      }
+    } else {
+      console.error('Element with id "title" not found.');
+    }
+  } catch (error) {
+    console.error('Error fetching and displaying data:', error);
+    // 处理错误
+  }
+}
+
+async function restartChat() {
+  try {
+    await restart();
+  } catch (error) {
+    console.error('Error fetching and displaying data:', error);
+    // 处理错误
+  }
+}
+
+
 onMounted(() => {
   emitterChat.on('on-close-list', () => {
     visibleList.value = false;
   });
+  restartChat();
+  fetchDataAndDisplay();
 });
 
 onUnmounted(() => {
   emitterChat.off('on-close-list');
 });
 </script>
+
+<style>
+.Title {
+  font-weight: bold;
+  font-size: 18px;
+}
+</style>

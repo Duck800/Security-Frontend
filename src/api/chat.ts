@@ -35,6 +35,39 @@ export async function completionsChat(data: CompletionsChatData) {
     });
 }
 
+export async function chatTitle() {
+  const Url = `http://47.113.191.98:8000/title`;
+
+  // 使用Axios发送GET请求
+  return axios.get(Url)
+    .then(response => {
+      // 处理成功响应
+      console.log(response.data);
+      return response.data; // 返回后端返回的数据
+    })
+    .catch(error => {
+      // 处理错误情况
+      console.error('Error fetching data:', error);
+      throw error; // 可以选择抛出错误或者做其他处理
+    });
+}
+
+export async function restart() {
+  const Url = `http://47.113.191.98:8000/answer?question=raks`;
+
+  // 使用Axios发送GET请求
+  return axios.get(Url)
+    .then(response => {
+      // 处理成功响应
+      return response.data; // 返回后端返回的数据
+    })
+    .catch(error => {
+      // 处理错误情况
+      console.error('Error fetching data:', error);
+      throw error; // 可以选择抛出错误或者做其他处理
+    });
+}
+
 export function chatList(model: GptModel) {
   return request.get(`/shell/api/chat/list/${model}`);
 }
