@@ -73,7 +73,7 @@ import { Checkmark, PaperPlane, CopyOutline } from '@vicons/ionicons5';
 
 export default defineComponent({
   name: 'Chat',
-  components: { NGridItem, NGrid, NSpace, NCard, Checkmark, NTooltip, CopyOutline, ChatGptSvg, NSpin, NAvatar, NScrollbar, NList, NListItem, NInput, NInputGroup, NButton, NIcon, PaperPlane },
+  components: { NGridItem, NGrid, NSpace, NCard, Checkmark, NTooltip, CopyOutline, NSpin, NAvatar, NScrollbar, NList, NListItem, NInput, NInputGroup, NButton, NIcon, PaperPlane },
   setup() {
     return {
       loadingSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14"><circle cx="50" cy="50" r="40" fill="#000"><animate attributeName="r" dur="1.5s" repeatCount="indefinite" values="40;45;40" /><animate attributeName="opacity" dur="1.5s" repeatCount="indefinite" values="1;0.5;1" /></circle></svg>`,

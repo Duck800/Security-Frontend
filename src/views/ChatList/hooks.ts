@@ -223,6 +223,7 @@ export const useChatList = () => {
     emitterChat.emit('on-chat-item', () => _id);
     emitterChat.emit('on-close-list');
   };
+  
   const handleEdit = ({ _id, title }: EditFormState) => {
     if (editForm.value._id === _id) return;
     editForm.value = { _id, title };
