@@ -142,6 +142,8 @@ export const useChat = () => {
       max_len:100,
       repetition_penalty:1
     };
+    sendValue.value = '';
+    
     const lastIndex = dataList.value.length - 1;
     if (stream) {
       startLoading('stream');
