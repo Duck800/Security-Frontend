@@ -25,9 +25,12 @@ export default defineConfig({
       css: true,
     })
   ],
+  optimizeDeps: {
+    include: ['naive-ui']
+  },
   server: {
     host: '0.0.0.0',
-    port: 8080,
+    port: 5173,
     open: true,
     proxy: {
       '/dev': {

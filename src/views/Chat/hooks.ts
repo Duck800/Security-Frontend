@@ -2,18 +2,18 @@ import { ref, nextTick, computed, ComputedRef, reactive, watch, onMounted, onUnm
 import { ScrollbarInst } from 'naive-ui';
 import useLoading from '@/hooks/useLoading';
 import { BASE_URL, IMG_BASE_URL, MAX_CONTEXT_NUM } from '@/utils/config';
-import useUserStore from '@/store/user';
-import { chatDetail, completionsChat, promptLibrary } from '@/api/chat';
+import { chatDetail, completionsChat } from '@/api/chat.ts';
 import useChatStore, { AssistantFormattedState, ChatDataState } from '@/store/chat.ts';
 import { ChatRoleType } from '@/utils/types.ts';
 import { emitterChat } from '@/utils/eventbus.ts';
 import { copyToClipboard } from '@/utils/tools.ts';
-import Prism from 'prismjs';
-import { CompletionsChatData } from '@/api/chat/types.ts';
+import { CompletionsChatData } from '@/api/types.ts';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import Prism from 'prismjs';
 import { start } from 'nprogress';
 import useBaseStore from '@/store/base.ts';
 import chatgptImg from '@/assets/images/chatgpt.png';
+import chatUser from '@/assets/images/avatar.png';
 import { cloneDeep } from 'lodash';
 
 interface RoleOptionsState {
@@ -22,31 +22,30 @@ interface RoleOptionsState {
   bgColor: string;
 }
 
-interface PromptLibrary {
-  id: string;
-  title: string;
-  description: string;
-  prompt: string;
-  category: string;
-  weight: number;
-}
+// interface PromptLibrary {
+//   id: string;
+//   title: string;
+//   description: string;
+//   prompt: string;
+//   category: string;
+//   weight: number;
+// }
 
 const message = window.$message;
 
 export const useChat = () => {
-  const user = useUserStore();
   const chat = useChatStore();
   const base = useBaseStore();
   const { isLoading, startLoading, endLoading } = useLoading<'answer' | 'main' | 'copy' | 'stream'>();
   const sendValue = ref('');
   const chatId = ref<string | null>(null);
   const dataList = ref<ChatDataState[]>([]);
-  const promptData = ref<PromptLibrary[]>([]);
+  // const promptData = ref<PromptLibrary[]>([]);
   const scrollbarRef = ref<ScrollbarInst | null>(null);
   const scrollContainers = ref<NodeListOf<Element> | null>(null);
   const chatRole = reactive<Record<ChatRoleType, RoleOptionsState>>({
     user: {
-      avatar: computed(() => `${IMG_BASE_URL}${user.userInfo.photo}`),
+      avatar: chatUser,
       flex: 'justify-end',
       bgColor: 'bg-green-200 dark:bg-green-600'
     },
@@ -57,17 +56,17 @@ export const useChat = () => {
     }
   });
 
-  const getPrompt = () => {
-    promptData.value = [];
-    setTimeout(() => {
-      promptLibrary().then(({ data }) => {
-        promptData.value = data;
-      });
-    }, 300);
-  };
-  const promptSend = ({ prompt }: PromptLibrary) => {
-    handleSend(prompt);
-  };
+  // const getPrompt = () => {
+  //   promptData.value = [];
+  //   // setTimeout(() => {
+  //   //   promptLibrary().then(({ data }) => {
+  //   //     promptData.value = data;
+  //   //   });
+  //   // }, 300);
+  // };
+  // const promptSend = ({ prompt }: PromptLibrary) => {
+  //   handleSend(prompt);
+  // };
   const assistantContentEffect = (content: string) => {
     const regex = /```([\s\S]*?)```/g;
     const parts = content.split(regex);
@@ -208,7 +207,6 @@ export const useChat = () => {
             controller.abort();
             // 请求完毕
             endLoading('stream');
-            user.setUserInfo('chat_limit', chunk.chatLimit);
             if (newChat) await reloadList();
           }
           endLoading('answer');
@@ -233,8 +231,6 @@ export const useChat = () => {
       nextTick(async () => {
         Prism.highlightAll();
         scrollEnd();
-        // 设置请求次数
-        user.setUserInfo('chat_limit', data.chatLimit);
         if (newChat) await reloadList();
       });
     } catch (e) {
@@ -263,7 +259,7 @@ export const useChat = () => {
   });
 
   onMounted(() => {
-    getPrompt();
+    // getPrompt();
     emitterChat.on('on-chat-item', async (func: () => string) => {
       endLoading('stream');
       endLoading('answer');
@@ -309,7 +305,7 @@ export const useChat = () => {
       // 新建对话
       chatId.value = null;
       dataList.value = [];
-      getPrompt();
+      // getPrompt();
     });
   });
 
@@ -325,8 +321,8 @@ export const useChat = () => {
     dataList,
     scrollbarRef,
     chatRole,
-    promptData,
-    promptSend,
+    // promptData,
+    // promptSend,
     handleSend,
     handleCopy
   };

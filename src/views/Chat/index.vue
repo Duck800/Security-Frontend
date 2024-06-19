@@ -51,7 +51,7 @@
           <chat-gpt-svg size="40" />
           <div class="mb-5 text-2xl font-medium">How can I help you today?</div>
         </div>
-        <div :class="`${base.isMobile ? 'w-full h-96 px-2.5 box-border' : 'w-1/2 h-60'} flex flex-col justify-end items-center`">
+        <!-- <div :class="`${base.isMobile ? 'w-full h-96 px-2.5 box-border' : 'w-1/2 h-60'} flex flex-col justify-end items-center`">
           <n-grid :cols="base.isMobile ? 1 : 2" :x-gap="10" :y-gap="10">
             <n-grid-item v-for="(item, index) in promptData" :key="index" :style="{ '--stagger': index + 1 }" data-animate>
               <n-card
@@ -63,7 +63,7 @@
               >{{ item.description }}</n-card>
             </n-grid-item>
           </n-grid>
-        </div>
+        </div> -->
       </div>
     </div>
     <div :class="`w-full h-20 pt-3 flex justify-center items-center box-border ${base.isMobile ? 'px-5' : 'px-28'}`">

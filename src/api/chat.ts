@@ -1,13 +1,13 @@
 import request from '@/utils/request.ts';
-import { CompletionsChatData, EditChatData } from '@/api/chat/types.ts';
+import { CompletionsChatData, EditChatData } from '@/api/types.ts';
 import { GptModel } from '@/utils/types.ts';
 
-export function promptLibrary() {
-  return request.get('/shell/api/chat/prompt');
-}
+// export function promptLibrary() {
+//   return request.get('/shell/api/chat/prompt');
+// }
 
 export function completionsChat(data: CompletionsChatData) {
-  return request.post('/shell/api/chat/completions', data);
+  return request.get('/answer', data);
 }
 
 export function chatList(model: GptModel) {

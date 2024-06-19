@@ -1,6 +1,5 @@
 import axios from 'axios';
 import type { AxiosError, AxiosRequestConfig, CreateAxiosDefaults } from 'axios';
-import { getToken, removeToken } from '@/utils/auth';
 import { BASE_URL } from '@/utils/config.ts';
 
 export interface Result<T = any> {
@@ -14,16 +13,6 @@ const service = axios.create(<CreateAxiosDefaults>{
   timeout: 30000
 });
 
-// 请求拦截器
-service.interceptors.request.use(config => {
-  const token = getToken();
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-}, (error: AxiosError) => {
-  window.$message.error(error.message);
-  return Promise.reject(error);
-});
-
 // 响应拦截器
 service.interceptors.response.use(response => {
   let { code, msg } = response.data;
@@ -33,9 +22,8 @@ service.interceptors.response.use(response => {
     return response.data;
   }
   if (code === 401) {
-    removeToken();
     const { origin, pathname } = window.location;
-    if (pathname !== '/login') window.location.href = `${origin}/#/login`;
+    if (pathname !== '/') window.location.href = `${origin}/#/`;
   }
   // 处理业务错误。
   window.$message.error(msg);

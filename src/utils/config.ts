@@ -15,10 +15,6 @@ export const IMG_BASE_URL = import.meta.env.VITE_APP_IMG_BASE_URL;
 export const GPT_MODEL_MAP = {
   'gpt-3.5-turbo': {
     consume: 1,
-    title: 'ChatGpt 3.5'
-  },
-  'gpt-4-turbo-preview': {
-    consume: 2,
-    title: 'ChatGpt 4'
+    title: 'Flight Assistant'
   }
 };

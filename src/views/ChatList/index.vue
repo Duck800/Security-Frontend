@@ -44,22 +44,6 @@
       </n-list>
       <n-empty v-else description="暂无数据" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"></n-empty>
     </n-scrollbar>
-    <n-popselect
-      v-model:value="bottomVal"
-      trigger="click"
-      size="large"
-      style="width: 220px;"
-      :options="options"
-      @updateShow="bottomVal = null"
-      @updateValue="val => handleChange(val, { fn: triggerModalEvent, code: 'modalSetting' })"
-    >
-      <div :class="`w-full h-14 px-3 box-border rounded cursor-pointer ${base.themeName === 'dark' ? 'hover:bg-dark-model' : 'hover:bg-gray-100'}`">
-        <div class="w-full h-full flex items-center">
-          <n-avatar round size="small" :src="avatar" />
-          <span class="font-medium ml-2 overflow-ellipsis whitespace-nowrap overflow-hidden">{{ user.userInfo.username }}</span>
-        </div>
-      </div>
-    </n-popselect>
     <!-- 设置 -->
     <n-modal
       v-model:show="modalConfig.modalSetting.show"
@@ -139,91 +123,6 @@
               </n-form>
             </div>
           </n-tab-pane>
-          <n-tab-pane name="account" tab="账号设置">
-            <div class="p-2.5 box-border">
-              <n-form
-                :label-width="70"
-                :model="modalConfig.modalSetting.form.account"
-                size="small"
-                label-align="left"
-                label-placement="left"
-              >
-                <n-form-item label="头像" path="photo" size="medium">
-                  <div class="w-full flex justify-end">
-                    <single-img v-model:src="modalConfig.modalSetting.form.account.photo" />
-                  </div>
-                </n-form-item>
-                <n-form-item label="用户名" path="username">
-                  <n-input-group>
-                    <n-input
-                      v-model:value="modalConfig.modalSetting.form.account.username"
-                      type="text"
-                      placeholder="请输入"
-                      :allow-input="noSideSpace"
-                    />
-                    <n-button
-                      :focusable="false"
-                      :loading="modalConfig.modalSetting.loadingState.username"
-                      :disabled="modalConfig.modalSetting.form.account.username === user.userInfo.username"
-                      @click="modalConfig.modalSetting.events?.onUpdateUsername"
-                      type="primary"
-                      ghost
-                    >保存</n-button>
-                  </n-input-group>
-                </n-form-item>
-                <n-form-item label="邮箱" path="email">
-                  <n-input
-                    v-model:value="modalConfig.modalSetting.form.account.email"
-                    type="text"
-                    placeholder="请输入"
-                    disabled
-                  />
-                </n-form-item>
-              </n-form>
-            </div>
-          </n-tab-pane>
-          <n-tab-pane name="updatePwd" tab="修改密码">
-            <div class="p-2.5 box-border">
-              <n-form
-                :ref="el => modalConfig.modalSetting.formRef = el"
-                :label-width="80"
-                :model="modalConfig.modalSetting.form.updatePwd"
-                :rules="modalConfig.modalSetting.rules"
-                size="small"
-                label-align="left"
-                label-placement="left"
-              >
-                <n-form-item label="新密码" path="newPwd">
-                  <n-input
-                    v-model:value="modalConfig.modalSetting.form.updatePwd.newPwd"
-                    type="password"
-                    placeholder="请输入"
-                    show-password-on="click"
-                    :allow-input="noSideSpace"
-                  />
-                </n-form-item>
-                <n-form-item label="确认密码" path="confirmPwd">
-                  <n-input
-                    v-model:value="modalConfig.modalSetting.form.updatePwd.confirmPwd"
-                    type="password"
-                    placeholder="请输入"
-                    show-password-on="click"
-                    :allow-input="noSideSpace"
-                  />
-                </n-form-item>
-                <n-form-item>
-                  <div class="w-full flex justify-end">
-                    <n-button
-                      type="primary"
-                      :loading="modalConfig.modalSetting.loadingState.send"
-                      :disabled="num < 60"
-                      @click="modalConfig.modalSetting.events?.onSave(triggerModalEvent, 'modalCode')"
-                    >{{ codeTxt }}</n-button>
-                  </div>
-                </n-form-item>
-              </n-form>
-            </div>
-          </n-tab-pane>
         </n-tabs>
       </div>
       <template #footer>
@@ -292,7 +191,6 @@ import {
 import { useChatList, useChatListModel } from '@/views/ChatList/hooks';
 import { PencilSharp, Trash, HelpCircle } from '@vicons/ionicons5';
 import ChatGptSvg from '@/components/ChatGptSvg.vue';
-import SingleImg from '@/components/SingleImg.vue';
 import { noSideSpace, onlyAllowNumber } from '@/utils/tools.ts';
 import useModalConfig from '@/hooks/useModalConfig.ts';
 
@@ -301,7 +199,6 @@ export default defineComponent({
   components: {
     HelpCircle,
     NInputGroup,
-    SingleImg,
     NSelect,
     NSwitch,
     NFormItem,
