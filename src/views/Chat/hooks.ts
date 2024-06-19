@@ -83,13 +83,13 @@ export const useChat = () => {
           str = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
         const content = str
-        .replace(/`([^`]+)`/g, blobFont) // 加粗字体
-        .replace(/\*\*(.*?)\*\*/g, blobFont) // 加粗字体
-        .replace(/---/g, separator) // 分割线
-        .replace(/####(.*?)\n/g, blobFontL4) // 加粗字体 l4 (gpt4)
-        .replace(/###(.*?)\n/g, blobFontL3) // 加粗字体 l3 (gpt4)
-        .replace(/-\s/g, '• ')
-        .replace(/\n\n/g, '\n'); // 双换行替换单换行
+          .replace(/`([^`]+)`/g, blobFont) // 加粗字体
+          .replace(/\*\*(.*?)\*\*/g, blobFont) // 加粗字体
+          .replace(/---/g, separator) // 分割线
+          .replace(/####(.*?)\n/g, blobFontL4) // 加粗字体 l4 (gpt4)
+          .replace(/###(.*?)\n/g, blobFontL3) // 加粗字体 l3 (gpt4)
+          .replace(/-\s/g, '• ')
+          .replace(/\n\n/g, '\n'); // 双换行替换单换行
         formatted.push({
           type: 'text',
           content: content.startsWith('\n') ? content.substring(1) : content
@@ -151,13 +151,17 @@ export const useChat = () => {
     const tempDataList = cloneDeep(dataList.value);
     tempDataList.pop();
     const payload: CompletionsChatData = {
-      chatId: newChat ? null : chatId.value,
-      model,
-      stream,
-      messages: openContext ? tempDataList.slice(MAX_CONTEXT_NUM).map(({ content, role }) => ({
-        role,
-        content: typeof content === 'string' ? content : content.map(item => item.content).join('\n')
-      })) : [{ role: 'user', content: text as string }]
+      // chatId: newChat ? null : chatId.value,
+      // stream,
+      // messages: openContext ? tempDataList.slice(MAX_CONTEXT_NUM).map(({ content, role }) => ({
+      //   role,
+      //   content: typeof content === 'string' ? content : content.map(item => item.content).join('\n')
+      // })) : [{ role: 'user', content: text as string }]
+      question: sendValue.value,
+      temperature:1,
+      max_history_len:10,
+      max_len:100,
+      repetition_penalty:1
     };
     const lastIndex = dataList.value.length - 1;
     if (stream) {
@@ -169,6 +173,7 @@ export const useChat = () => {
       const errControl = (err: string) => {
         console.log('errControl', err);
         message.error(err);
+        // console.log(err)
         endLoading('answer');
         endLoading('stream');
         dataList.value.splice(-2);
@@ -220,7 +225,18 @@ export const useChat = () => {
       return;
     }
     try {
-      const { data } = await completionsChat(payload);
+      // const { data } = await completionsChat(payload);
+      const data = {
+        choices: [
+          {
+            message: {
+              content: "回答",
+              role: <ChatRoleType>'assistant'
+            }
+          }
+        ],
+        createTime: "2024-6-19"
+      }
       // 解析文本
       const [{ message }] = data.choices;
       dataList.value[lastIndex] = {
@@ -228,16 +244,17 @@ export const useChat = () => {
         role: message.role,
         createTime: data?.createTime
       };
+
       nextTick(async () => {
         Prism.highlightAll();
         scrollEnd();
         if (newChat) await reloadList();
       });
-    } catch (e) {
+    }catch (e) {
       message.error(e + '');
       // 删除报错对话
-      dataList.value.splice(-2);
-    }  finally {
+      // dataList.value.splice(-2);
+    } finally {
       endLoading('answer');
     }
   };

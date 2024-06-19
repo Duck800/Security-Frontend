@@ -25,9 +25,10 @@ service.interceptors.response.use(response => {
     const { origin, pathname } = window.location;
     if (pathname !== '/') window.location.href = `${origin}/#/`;
   }
-  // 处理业务错误。
-  window.$message.error(msg);
-  return Promise.reject(new Error(msg));
+  
+  // // 处理业务错误
+  // window.$message.error(msg);
+  // return Promise.reject(new Error(msg));
 }, (error: AxiosError) => {
   // HTTP 状态码
   const status = error.response?.status;

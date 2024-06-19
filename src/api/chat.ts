@@ -7,7 +7,8 @@ import { GptModel } from '@/utils/types.ts';
 // }
 
 export function completionsChat(data: CompletionsChatData) {
-  return request.get('/answer', data);
+  return request.get('/');
+    // , data);
 }
 
 export function chatList(model: GptModel) {
